@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
     // Rigidbody of the player.
     private Rigidbody rb;
+    private int count;
+    public GameObject winTextObject;
 
     // Movement along X and Y axes.
     private float movementX;
@@ -12,12 +15,15 @@ public class PlayerController : MonoBehaviour
 
     // Speed at which the player moves.
     public float speed = 0;
-
+    public TextMeshProUGUI countText;
     // Start is called before the first frame update.
     void Start()
     {
         // Get and store the Rigidbody component attached to the player.
         rb = GetComponent<Rigidbody>();
+        count = 0;
+        SetCountText();
+        winTextObject.SetActive(false);
     }
 
     // This function is called when a move input is detected.
@@ -29,6 +35,14 @@ public class PlayerController : MonoBehaviour
         // Store the X and Y components of the movement.
         movementX = movementVector.x;
         movementY = movementVector.y;
+    }
+    void SetCountText()
+    {
+        countText.text = "Count: " + count.ToString();
+        if (count >= 12)
+        {
+            winTextObject.SetActive(true);
+        }
     }
 
     // FixedUpdate is called once per fixed frame-rate frame.
@@ -48,6 +62,8 @@ public class PlayerController : MonoBehaviour
         {
             // Deactivate the collided object (making it disappear).
             other.gameObject.SetActive(false);
+            count = count + 1;
+            SetCountText();
         }
     }
 
